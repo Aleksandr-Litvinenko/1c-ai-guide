@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-08-07",
+  "tools": [
+    {
+      "id": "cc-1c-skills",
+      "name": "1C Skills for AI agents",
+      "repository": "https://github.com/Nikolay-Shirokov/cc-1c-skills",
+      "category": "agent-skills",
+      "use_case": "Create, modify, build and test 1C artifacts with AI agents",
+      "language": "Python / PowerShell",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "openintegrations",
+      "name": "OpenIntegrations",
+      "repository": "https://github.com/Bayselonarrend/OpenIntegrations",
+      "category": "integration-library",
+      "use_case": "Connect 1C and OneScript to Bitrix24 and external APIs",
+      "language": "1C Enterprise",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "edt-mcp",
+      "name": "EDT-MCP",
+      "repository": "https://github.com/DitriXNew/EDT-MCP",
+      "category": "ide-bridge",
+      "use_case": "Expose 1C:EDT capabilities to MCP clients",
+      "language": "Java",
+      "license": "AGPL-3.0",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "1c-mcp-framework",
+      "name": "1c_mcp",
+      "repository": "https://github.com/vladimir-kharin/1c_mcp",
+      "category": "mcp-framework",
+      "use_case": "Build MCP tools inside a 1C extension",
+      "language": "1C Enterprise / Python",
+      "license": "not-declared",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "1c-mcp-toolkit",
+      "name": "1c-mcp-toolkit",
+      "repository": "https://github.com/ROCTUP/1c-mcp-toolkit",
+      "category": "database-mcp",
+      "use_case": "Read metadata and data through MCP and REST",
+      "language": "1C Enterprise",
+      "license": "GPL-3.0",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "mcp-1c",
+      "name": "mcp-1c",
+      "repository": "https://github.com/feenlace/mcp-1c",
+      "category": "code-context",
+      "use_case": "Provide configuration context and generate accurate BSL code",
+      "language": "Go",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "mcp-1c-v1",
+      "name": "mcp-1c-v1",
+      "repository": "https://github.com/fserg/mcp-1c-v1",
+      "category": "code-context",
+      "use_case": "RAG search over 1C configuration structure",
+      "language": "TypeScript",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "code-index-mcp",
+      "name": "code-index-mcp",
+      "repository": "https://github.com/Regsorm/code-index-mcp",
+      "category": "code-context",
+      "use_case": "Index and navigate production-scale BSL repositories",
+      "language": "Rust",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "1c-ai-connector",
+      "name": "1c-ai-connector",
+      "repository": "https://github.com/andromanpro/1c-ai-connector",
+      "category": "ai-runtime",
+      "use_case": "Use LLM providers, function calling, RAG and MCP inside 1C",
+      "language": "1C Enterprise",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "1c-trusted-gateway",
+      "name": "1c-trusted-gateway",
+      "repository": "https://github.com/alonehobo/1c-trusted-gateway",
+      "category": "security-gateway",
+      "use_case": "Proxy AI access to 1C with data masking controls",
+      "language": "Go",
+      "license": "not-declared",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "bitrix24-mcp-rest-doc",
+      "name": "Bitrix24 MCP REST documentation",
+      "repository": "https://github.com/bitrix24/mcp-rest-doc",
+      "category": "documentation-mcp",
+      "use_case": "Give AI assistants current Bitrix24 REST API documentation",
+      "language": "MCP",
+      "license": "not-declared",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "bitrix24-templates-mcp",
+      "name": "Bitrix24 MCP template",
+      "repository": "https://github.com/bitrix24/templates-mcp",
+      "category": "mcp-template",
+      "use_case": "Build a production-oriented MCP server for Bitrix24",
+      "language": "TypeScript",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "bitrix24-mcp",
+      "name": "bitrix24-mcp",
+      "repository": "https://github.com/kartochka/bitrix24-mcp",
+      "category": "crm-mcp",
+      "use_case": "Read and manage Bitrix24 through natural-language workflows",
+      "language": "Python",
+      "license": "MIT",
+      "reviewed_on": "2026-08-07"
+    },
+    {
+      "id": "awesome-1c-mcp",
+      "name": "Awesome 1C MCP Servers",
+      "repository": "https://github.com/Untru/1c-mcp",
+      "category": "catalog",
+      "use_case": "Explore the complete technical catalog of MCP servers for 1C",
+      "language": "Markdown",
+      "license": "not-declared",
+      "reviewed_on": "2026-08-07"
+    }
+  ]
+}
