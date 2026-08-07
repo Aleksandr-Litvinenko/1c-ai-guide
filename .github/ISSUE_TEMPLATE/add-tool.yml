@@ -1,0 +1,51 @@
+name: Предложить инструмент
+description: Добавить open-source проект в каталог AI × 1C
+title: "[Tool]: "
+labels: [catalog]
+body:
+  - type: input
+    id: repository
+    attributes:
+      label: Репозиторий
+      placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Какую задачу решает
+      description: Одно проверяемое описание без рекламных формулировок.
+    validations:
+      required: true
+  - type: dropdown
+    id: data-access
+    attributes:
+      label: Доступ к данным
+      options:
+        - Не требуется
+        - Только чтение
+        - Чтение и запись
+        - Неизвестно
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: Лицензия
+      placeholder: MIT, Apache-2.0 или не указана
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Как проверить
+      description: Ссылка на quick start, demo или тесты.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Подтверждение
+      options:
+        - label: Я не публикую пароли, токены или реальные бизнес-данные.
+          required: true

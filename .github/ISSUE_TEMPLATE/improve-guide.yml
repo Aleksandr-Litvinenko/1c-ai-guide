@@ -1,0 +1,22 @@
+name: Улучшить гид
+description: Исправить факт, рецепт или структуру
+title: "[Guide]: "
+labels: [documentation]
+body:
+  - type: textarea
+    id: current
+    attributes:
+      label: Что сейчас не так
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Предлагаемое изменение
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Первоисточник
+      description: Ссылка, если изменение относится к факту о внешнем проекте.
