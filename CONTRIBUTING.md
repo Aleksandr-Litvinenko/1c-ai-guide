@@ -46,6 +46,7 @@
 python3 scripts/validate_catalog.py
 python3 scripts/validate_guide.py
 python3 -m py_compile scripts/*.py
+python3 -m unittest discover -s tests -v
 ```
 
 При наличии GitHub-токена можно дополнительно сверить метаданные с API:
