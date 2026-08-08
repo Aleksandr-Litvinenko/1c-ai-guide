@@ -1,5 +1,5 @@
 name: Предложить инструмент
-description: Добавить open-source проект в каталог AI × 1C
+description: Добавить open-source проект в проверяемый каталог AI × 1C
 title: "[Tool]: "
 labels: [catalog]
 body:
@@ -8,6 +8,14 @@ body:
     attributes:
       label: Репозиторий
       placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Проверенная версия
+      description: Полный commit SHA или релиз, на котором основано описание.
+      placeholder: 0123456789abcdef0123456789abcdef01234567
     validations:
       required: true
   - type: textarea
@@ -20,26 +28,41 @@ body:
   - type: dropdown
     id: data-access
     attributes:
-      label: Доступ к данным
+      label: Доступ к бизнес-данным
       options:
         - Не требуется
         - Только чтение
         - Чтение и запись
+        - Настраивается
         - Неизвестно
+    validations:
+      required: true
+  - type: textarea
+    id: mutation
+    attributes:
+      label: Операции записи и удаления
+      description: Перечислите write/delete tools, выполнение произвольного кода и режим по умолчанию. Если их нет — объясните, чем запрет обеспечен на сервере.
+    validations:
+      required: true
+  - type: textarea
+    id: prerequisites
+    attributes:
+      label: Требования и платформы
+      description: ОС, версии 1С/EDT, runtime, Docker, внешние компоненты и ограничения.
     validations:
       required: true
   - type: input
     id: license
     attributes:
       label: Лицензия
-      placeholder: MIT, Apache-2.0 или не указана
+      placeholder: MIT, Apache-2.0 или не объявлена
     validations:
       required: true
   - type: textarea
     id: verification
     attributes:
       label: Как проверить
-      description: Ссылка на quick start, demo или тесты.
+      description: Точные команды, ожидаемый результат и ссылки на README, релиз или логи безопасного smoke-test.
     validations:
       required: true
   - type: checkboxes
@@ -48,4 +71,6 @@ body:
       label: Подтверждение
       options:
         - label: Я не публикую пароли, токены или реальные бизнес-данные.
+          required: true
+        - label: Я отделил проверенные факты от предположений и указал непроверенные этапы.
           required: true

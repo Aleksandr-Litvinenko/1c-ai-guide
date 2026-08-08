@@ -1,146 +1,545 @@
 {
-  "schema_version": 1,
-  "reviewed_on": "2026-08-07",
+  "schema_version": 2,
+  "reviewed_on": "2026-08-08",
   "tools": [
     {
       "id": "cc-1c-skills",
       "name": "1C Skills for AI agents",
       "repository": "https://github.com/Nikolay-Shirokov/cc-1c-skills",
+      "source_ref": "main",
+      "source_revision": "4c84d840dff0ecad4acc46d89f5ccff246750e25",
       "category": "agent-skills",
       "use_case": "Create, modify, build and test 1C artifacts with AI agents",
-      "language": "Python / PowerShell",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "runtimes": ["Python", "PowerShell"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/Nikolay-Shirokov/cc-1c-skills/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "read-write",
+        "configuration_metadata": "read-write",
+        "business_data": "configurable",
+        "external_services": "none",
+        "default_mode": "read-write",
+        "mutating_operations": ["meta-edit", "form-edit", "db-load-cf", "db-load-xml", "db-update"],
+        "destructive_operations": ["meta-remove", "form-remove", "web-unpublish"]
+      },
+      "platforms": ["windows", "linux", "macos", "1c-enterprise"],
+      "prerequisites": [
+        "PowerShell 5.1+ on Windows or Python 3.9+",
+        "1C:Enterprise 8.3 for EPF/ERF build and configuration operations",
+        "Node.js 18+ for web-test"
+      ],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-08-08", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "cli-smoke",
+        "checked_on": "2026-08-08",
+        "version": "revision 4c84d84",
+        "evidence_urls": ["https://github.com/Nikolay-Shirokov/cc-1c-skills/blob/main/README.md"],
+        "notes": "Python switch installed 77 Codex skills and epf-init produced valid XML on macOS; no 1C end-to-end run."
+      }
     },
     {
       "id": "openintegrations",
       "name": "OpenIntegrations",
       "repository": "https://github.com/Bayselonarrend/OpenIntegrations",
+      "source_ref": "main",
+      "source_revision": "b6b324452cb585b0652c26e7e92e4e451339e0a1",
       "category": "integration-library",
       "use_case": "Connect 1C and OneScript to Bitrix24 and external APIs",
-      "language": "1C Enterprise",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "runtimes": ["1C Enterprise", "OneScript", "OInt CLI"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/Bayselonarrend/OpenIntegrations/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "none",
+        "business_data": "configurable",
+        "external_services": "read-write",
+        "default_mode": "read-write",
+        "mutating_operations": ["execute_method"],
+        "destructive_operations": ["unknown"]
+      },
+      "platforms": ["windows", "linux", "1c-enterprise"],
+      "prerequisites": [
+        "1C 8.3.10 library or 8.3.15 extension",
+        "OneScript 2.0+ or OInt CLI",
+        "Release or stable branch recommended; web client is not supported"
+      ],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-07-30", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "artifact",
+        "checked_on": "2026-08-08",
+        "version": "2.3.0",
+        "evidence_urls": [
+          "https://github.com/Bayselonarrend/OpenIntegrations/blob/main/README.md",
+          "https://github.com/Bayselonarrend/OpenIntegrations/releases/tag/v2.3.0"
+        ],
+        "notes": "Release OSPX archive and MCP module metadata inspected; runtime was not started. execute_method can call mutating APIs."
+      }
     },
     {
       "id": "edt-mcp",
       "name": "EDT-MCP",
       "repository": "https://github.com/DitriXNew/EDT-MCP",
+      "source_ref": "master",
+      "source_revision": "932a99f3cd5844cf99c878d23a09dcadf12f4148",
       "category": "ide-bridge",
       "use_case": "Expose 1C:EDT capabilities to MCP clients",
-      "language": "Java",
-      "license": "AGPL-3.0",
-      "reviewed_on": "2026-08-07"
+      "runtimes": ["Java", "1C:EDT plugin"],
+      "license": {
+        "spdx": "AGPL-3.0",
+        "status": "file",
+        "source_url": "https://github.com/DitriXNew/EDT-MCP/blob/master/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "read-write",
+        "configuration_metadata": "read-write",
+        "business_data": "configurable",
+        "external_services": "none",
+        "default_mode": "read-write",
+        "mutating_operations": ["write_module_source", "create_metadata", "modify_metadata", "update_database"],
+        "destructive_operations": ["delete_project", "delete_infobase", "delete_metadata"]
+      },
+      "platforms": ["1c-edt"],
+      "prerequisites": ["1C:EDT 2026.1 or 2026.2", "Java 17+"],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-08-08", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "artifact",
+        "checked_on": "2026-08-08",
+        "version": "2.10.1",
+        "evidence_urls": [
+          "https://github.com/DitriXNew/EDT-MCP/blob/master/README.md",
+          "https://github.com/DitriXNew/EDT-MCP/releases/tag/v2.10.1"
+        ],
+        "notes": "Update site and release archive inspected; plugin was not run in EDT. Default All Tools includes write and destructive operations."
+      }
     },
     {
       "id": "1c-mcp-framework",
       "name": "1c_mcp",
       "repository": "https://github.com/vladimir-kharin/1c_mcp",
+      "source_ref": "main",
+      "source_revision": "12570f9eae67b23017a43ce8959931abcc00d33d",
       "category": "mcp-framework",
-      "use_case": "Build MCP tools inside a 1C extension",
-      "language": "1C Enterprise / Python",
-      "license": "not-declared",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Build installation-specific MCP tools inside a 1C extension",
+      "runtimes": ["1C Enterprise", "Python", "Docker"],
+      "license": {
+        "spdx": "unknown",
+        "status": "readme-only",
+        "source_url": "https://github.com/vladimir-kharin/1c_mcp/blob/main/README.md#лицензия"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "unknown",
+        "configuration_metadata": "read",
+        "business_data": "configurable",
+        "external_services": "none",
+        "default_mode": "configurable",
+        "mutating_operations": ["custom tools (installation-defined)"],
+        "destructive_operations": ["unknown"]
+      },
+      "platforms": ["1c-enterprise", "docker"],
+      "prerequisites": [
+        "1C:Enterprise 8.3+",
+        "Published mcp_APIBackend HTTP service",
+        "Python proxy recommended; Docker optional"
+      ],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-08-03", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "unknown",
+        "evidence_urls": ["https://github.com/vladimir-kharin/1c_mcp/blob/main/README.md"],
+        "notes": "README says MIT but no LICENSE file is present. Access depends on custom tools; direct mode without the proxy weakens authentication."
+      }
     },
     {
       "id": "1c-mcp-toolkit",
       "name": "1c-mcp-toolkit",
       "repository": "https://github.com/ROCTUP/1c-mcp-toolkit",
+      "source_ref": "main",
+      "source_revision": "fe12903af7a367a9d67dd055c13f4b59bb59d83c",
       "category": "database-mcp",
-      "use_case": "Read metadata and data through MCP and REST",
-      "language": "1C Enterprise",
-      "license": "GPL-3.0",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Expose 1C metadata, data and code execution through MCP and REST",
+      "runtimes": ["1C Enterprise", "Python", "Docker"],
+      "license": {
+        "spdx": "GPL-3.0",
+        "status": "file",
+        "source_url": "https://github.com/ROCTUP/1c-mcp-toolkit/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "read",
+        "business_data": "read-write",
+        "external_services": "none",
+        "default_mode": "read-write",
+        "mutating_operations": ["execute_code"],
+        "destructive_operations": ["execute_code"]
+      },
+      "platforms": ["windows", "linux", "macos", "1c-enterprise", "docker"],
+      "prerequisites": ["1C:Enterprise", "Python or Docker for proxy mode", "Node.js only for mcp-remote bridge"],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-07-24", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "unknown",
+        "evidence_urls": ["https://github.com/ROCTUP/1c-mcp-toolkit/blob/main/README.md"],
+        "notes": "Arbitrary 1C code execution is exposed; blacklist and approval behavior were not independently tested."
+      }
     },
     {
       "id": "mcp-1c",
       "name": "mcp-1c",
       "repository": "https://github.com/feenlace/mcp-1c",
+      "source_ref": "main",
+      "source_revision": "35aed5f1549b59e9c2e33e7c2dbc864d94aff65a",
       "category": "code-context",
-      "use_case": "Provide configuration context and generate accurate BSL code",
-      "language": "Go",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Expose configuration metadata and dump search to an AI assistant",
+      "runtimes": ["Go", "1C extension"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/feenlace/mcp-1c/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "read",
+        "configuration_metadata": "read",
+        "business_data": "read",
+        "external_services": "none",
+        "default_mode": "read-only",
+        "mutating_operations": [],
+        "destructive_operations": []
+      },
+      "platforms": ["windows", "linux", "macos", "1c-enterprise"],
+      "prerequisites": [
+        "1C:Enterprise 8.3.10+",
+        "1C HTTP service or offline configuration dump",
+        "macOS requires a remote Windows/Linux host for the 1C HTTP service"
+      ],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-08-06", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "cli-smoke",
+        "checked_on": "2026-08-08",
+        "version": "1.14.0",
+        "evidence_urls": [
+          "https://github.com/feenlace/mcp-1c/blob/main/README.md",
+          "https://github.com/feenlace/mcp-1c/releases/tag/v1.14.0"
+        ],
+        "notes": "darwin-arm64 checksum, version and help passed; no 1C database or HTTP service test. Values describe the open edition."
+      }
     },
     {
       "id": "mcp-1c-v1",
       "name": "mcp-1c-v1",
       "repository": "https://github.com/fserg/mcp-1c-v1",
-      "category": "code-context",
-      "use_case": "RAG search over 1C configuration structure",
-      "language": "TypeScript",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "source_ref": "main",
+      "source_revision": "2699aeca00bbec4901a6ad35593accf71fe96136",
+      "category": "metadata-rag",
+      "use_case": "RAG search over an exported 1C configuration structure",
+      "runtimes": ["Python", "Docker", "Qdrant"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/fserg/mcp-1c-v1/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "read",
+        "business_data": "none",
+        "external_services": "none",
+        "default_mode": "read-only",
+        "mutating_operations": [],
+        "destructive_operations": []
+      },
+      "platforms": ["docker", "1c-enterprise"],
+      "prerequisites": ["Docker Compose", "Qdrant, embedding, loader and MCP services", "1C EPF export of configuration structure"],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2025-08-04", "archived": false, "status": "stale"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "unknown",
+        "evidence_urls": ["https://github.com/fserg/mcp-1c-v1/blob/main/README.md"],
+        "notes": "Indexes configuration structure, not BSL source code; no runtime smoke test."
+      }
     },
     {
       "id": "code-index-mcp",
       "name": "code-index-mcp",
       "repository": "https://github.com/Regsorm/code-index-mcp",
+      "source_ref": "main",
+      "source_revision": "4a842c9f94b282dbc20f7a094673c087ba74a83d",
       "category": "code-context",
-      "use_case": "Index and navigate production-scale BSL repositories",
-      "language": "Rust",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Index and navigate large BSL repositories with the bsl-indexer binary",
+      "runtimes": ["Rust"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/Regsorm/code-index-mcp/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "read",
+        "configuration_metadata": "read",
+        "business_data": "none",
+        "external_services": "none",
+        "default_mode": "read-only",
+        "mutating_operations": [],
+        "destructive_operations": []
+      },
+      "platforms": ["windows-x64", "linux-x64", "macos-arm64"],
+      "prerequisites": [
+        "bsl-indexer release binary, not the default npm code-index wrapper",
+        "Exported XML or EDT configuration",
+        "Rust 1.77+ only when building from source"
+      ],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-08-06", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "unknown",
+        "evidence_urls": ["https://github.com/Regsorm/code-index-mcp/blob/main/README.md"],
+        "notes": "The npm and MCP Registry wrapper ships code-index without 1C support; BSL requires bsl-indexer."
+      }
     },
     {
       "id": "1c-ai-connector",
       "name": "1c-ai-connector",
       "repository": "https://github.com/andromanpro/1c-ai-connector",
+      "source_ref": "main",
+      "source_revision": "eeb03a07c75e6e1f87767c71582fb299a919c47b",
       "category": "ai-runtime",
       "use_case": "Use LLM providers, function calling, RAG and MCP inside 1C",
-      "language": "1C Enterprise",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "runtimes": ["1C Enterprise"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/andromanpro/1c-ai-connector/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "configurable",
+        "configuration_metadata": "read",
+        "business_data": "configurable",
+        "external_services": "configurable",
+        "default_mode": "configurable",
+        "mutating_operations": ["custom function-calling tools (installation-defined)"],
+        "destructive_operations": ["unknown"]
+      },
+      "platforms": ["1c-enterprise"],
+      "prerequisites": ["1C:Enterprise 8.3.24+", "BSP 3.1.10+", "Internet for cloud providers", "Qdrant and Kroki optional"],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2026-07-20", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "1.3.0",
+        "evidence_urls": ["https://github.com/andromanpro/1c-ai-connector/blob/main/README.md"],
+        "notes": "Built-in MCP queries are documented as read-only; custom agent tools may differ."
+      }
     },
     {
       "id": "1c-trusted-gateway",
       "name": "1c-trusted-gateway",
       "repository": "https://github.com/alonehobo/1c-trusted-gateway",
-      "category": "security-gateway",
-      "use_case": "Proxy AI access to 1C with data masking controls",
-      "language": "Go",
-      "license": "not-declared",
-      "reviewed_on": "2026-08-07"
+      "source_ref": "main",
+      "source_revision": "a5cc656e3f3763800706ec752fd33fb2e18318e4",
+      "category": "experimental-privacy-gateway",
+      "use_case": "Experiment with masking controls in front of a 1C MCP endpoint",
+      "runtimes": ["Go", "1C extension"],
+      "license": {
+        "spdx": "unknown",
+        "status": "not-declared",
+        "source_url": "https://github.com/alonehobo/1c-trusted-gateway"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "unknown",
+        "business_data": "read-write",
+        "external_services": "none",
+        "default_mode": "read-write",
+        "mutating_operations": ["gateway_execute_code"],
+        "destructive_operations": ["gateway_execute_code"]
+      },
+      "platforms": ["windows-x64", "1c-enterprise"],
+      "prerequisites": ["Windows 10 or 11 x64", "1C:Enterprise 8.3 with MCP_Сервер.cfe", "Published hs/mcp HTTP service"],
+      "maturity": "experimental",
+      "maintenance": {"last_push": "2026-04-24", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "unknown",
+        "evidence_urls": ["https://github.com/alonehobo/1c-trusted-gateway/blob/main/README.md"],
+        "notes": "Masking and security properties are upstream claims; no independent security or runtime test. Arbitrary code execution is exposed."
+      }
     },
     {
       "id": "bitrix24-mcp-rest-doc",
       "name": "Bitrix24 MCP REST documentation",
       "repository": "https://github.com/bitrix24/mcp-rest-doc",
+      "source_ref": "main",
+      "source_revision": "ed332fe12a9cbed602572aeacecea17ed3d2d0cd",
       "category": "documentation-mcp",
-      "use_case": "Give AI assistants current Bitrix24 REST API documentation",
-      "language": "MCP",
-      "license": "not-declared",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Query current Bitrix24 REST API documentation from a hosted MCP service",
+      "runtimes": ["Hosted MCP service", "Documentation"],
+      "license": {
+        "spdx": "unknown",
+        "status": "not-declared",
+        "source_url": "https://github.com/bitrix24/mcp-rest-doc"
+      },
+      "source_available": "no",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "none",
+        "business_data": "none",
+        "external_services": "read",
+        "default_mode": "read-only",
+        "mutating_operations": [],
+        "destructive_operations": []
+      },
+      "platforms": ["hosted"],
+      "prerequisites": ["Network access", "MCP client with Streamable HTTP support", "No authentication required as of check"],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2025-12-12", "archived": false, "status": "live-service"},
+      "verification": {
+        "level": "live-smoke",
+        "checked_on": "2026-08-08",
+        "version": "0.2.0",
+        "evidence_urls": [
+          "https://github.com/bitrix24/mcp-rest-doc/blob/main/README.md",
+          "https://mcp-dev.bitrix24.com/mcp"
+        ],
+        "notes": "initialize, tools/list, bitrix-search and bitrix-method-details succeeded. The live service returned 5 tools while the repository README lists 4."
+      }
     },
     {
       "id": "bitrix24-templates-mcp",
-      "name": "Bitrix24 MCP template",
+      "name": "Bitrix24 tasks MCP reference implementation",
       "repository": "https://github.com/bitrix24/templates-mcp",
-      "category": "mcp-template",
-      "use_case": "Build a production-oriented MCP server for Bitrix24",
-      "language": "TypeScript",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "source_ref": "main",
+      "source_revision": "1f825befd6bfcb620324bd87858977062fabf9ec",
+      "category": "mcp-reference-implementation",
+      "use_case": "Build or study a tasks-focused MCP server for Bitrix24",
+      "runtimes": ["TypeScript", "Node.js", "Nuxt", "Docker", "DXT"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/bitrix24/templates-mcp/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "none",
+        "business_data": "read-write",
+        "external_services": "read-write",
+        "default_mode": "read-write",
+        "mutating_operations": ["task create/update/lifecycle", "comments, results and elapsed-time mutation"],
+        "destructive_operations": ["checklist item, result and elapsed-time deletion", "dependency removal"]
+      },
+      "platforms": ["windows", "linux", "macos", "docker", "hosted"],
+      "prerequisites": ["Node.js 22+", "Bitrix24 webhook with user and task scopes", "TLS and Bearer token or OAuth for remote deployment"],
+      "maturity": "pre-1.0",
+      "maintenance": {"last_push": "2026-07-03", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "pre-1.0",
+        "evidence_urls": ["https://github.com/bitrix24/templates-mcp/blob/main/README.md"],
+        "notes": "Current implemented scope is Bitrix24 tasks and user lookup; upstream warns that pre-1.0 contracts can change."
+      }
     },
     {
       "id": "bitrix24-mcp",
       "name": "bitrix24-mcp",
       "repository": "https://github.com/kartochka/bitrix24-mcp",
+      "source_ref": "main",
+      "source_revision": "5eaf70d99abebcec53035c1d61ee15f70ad429ec",
       "category": "crm-mcp",
-      "use_case": "Read and manage Bitrix24 through natural-language workflows",
-      "language": "Python",
-      "license": "MIT",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Read contacts and deals and update deal stages in Bitrix24",
+      "runtimes": ["Python"],
+      "license": {
+        "spdx": "MIT",
+        "status": "file",
+        "source_url": "https://github.com/kartochka/bitrix24-mcp/blob/main/LICENSE"
+      },
+      "source_available": "yes",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "none",
+        "business_data": "read-write",
+        "external_services": "read-write",
+        "default_mode": "read-write",
+        "mutating_operations": ["update_deal_stage"],
+        "destructive_operations": []
+      },
+      "platforms": ["unknown"],
+      "prerequisites": ["Python 3.12+", "Bitrix24 cloud or self-hosted portal", "Incoming webhook with crm scope"],
+      "maturity": "unknown",
+      "maintenance": {"last_push": "2025-05-28", "archived": false, "status": "stale"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "1.0.1",
+        "evidence_urls": [
+          "https://github.com/kartochka/bitrix24-mcp/blob/main/README.md",
+          "https://pypi.org/project/bitrix24-mcp/"
+        ],
+        "notes": "Documented scope is contacts, deals and deal-stage updates; installation was not smoke-tested."
+      }
     },
     {
       "id": "awesome-1c-mcp",
       "name": "Awesome 1C MCP Servers",
       "repository": "https://github.com/Untru/1c-mcp",
+      "source_ref": "master",
+      "source_revision": "24a4526d615ca2c531264145553d5e0d28f6e7ce",
       "category": "catalog",
-      "use_case": "Explore the complete technical catalog of MCP servers for 1C",
-      "language": "Markdown",
-      "license": "not-declared",
-      "reviewed_on": "2026-08-07"
+      "use_case": "Explore a broad curated catalog of MCP servers for 1C",
+      "runtimes": ["Markdown"],
+      "license": {
+        "spdx": "unknown",
+        "status": "not-declared",
+        "source_url": "https://github.com/Untru/1c-mcp"
+      },
+      "source_available": "not-applicable",
+      "access": {
+        "configuration_source": "none",
+        "configuration_metadata": "none",
+        "business_data": "none",
+        "external_services": "none",
+        "default_mode": "read-only",
+        "mutating_operations": [],
+        "destructive_operations": []
+      },
+      "platforms": ["web"],
+      "prerequisites": ["none"],
+      "maturity": "not-applicable",
+      "maintenance": {"last_push": "2026-08-05", "archived": false, "status": "recent"},
+      "verification": {
+        "level": "docs",
+        "checked_on": "2026-08-08",
+        "version": "unknown",
+        "evidence_urls": ["https://github.com/Untru/1c-mcp/blob/master/README.md"],
+        "notes": "Curated external catalog; completeness and project status are not independently guaranteed."
+      }
     }
   ]
 }
