@@ -7,7 +7,7 @@
       "name": "1C Skills for AI agents",
       "repository": "https://github.com/Nikolay-Shirokov/cc-1c-skills",
       "source_ref": "main",
-      "source_revision": "4c84d840dff0ecad4acc46d89f5ccff246750e25",
+      "source_revision": "aa32fb84dc4694e5a39391ece081cdaf30ff6f58",
       "category": "agent-skills",
       "use_case": "Create, modify, build and test 1C artifacts with AI agents",
       "runtimes": ["Python", "PowerShell"],
@@ -37,9 +37,12 @@
       "verification": {
         "level": "cli-smoke",
         "checked_on": "2026-08-08",
-        "version": "revision 4c84d84",
-        "evidence_urls": ["https://github.com/Nikolay-Shirokov/cc-1c-skills/blob/main/README.md"],
-        "notes": "Python switch installed 77 Codex skills and epf-init produced valid XML on macOS; no 1C end-to-end run."
+        "version": "revision aa32fb8",
+        "evidence_urls": [
+          "https://github.com/Nikolay-Shirokov/cc-1c-skills/blob/main/README.md",
+          "https://github.com/Nikolay-Shirokov/cc-1c-skills/commit/aa32fb84dc4694e5a39391ece081cdaf30ff6f58"
+        ],
+        "notes": "Python switch installed 77 Codex skills and epf-init produced valid XML at 4c84d84. At aa32fb8, 612 active snapshot cases passed and 51 were skipped; build-cfe passed standalone after one concurrent-run failure. No 1C end-to-end run."
       }
     },
     {
