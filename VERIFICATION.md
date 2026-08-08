@@ -19,7 +19,7 @@
 
 | Проект | Среда и версия | Результат | Граница проверки |
 |---|---|---|---|
-| `cc-1c-skills` | macOS, Python runtime, commit `4c84d84` | `switch.py` установил 77 Codex skills; `epf-init` создал валидный XML | Не было загрузки EPF в 1С, PowerShell и web-test |
+| `cc-1c-skills` | macOS, Python runtime, commit `aa32fb8` | Ранее `switch.py` установил 77 Codex skills и `epf-init` создал валидный XML; на текущем commit прошли 612 активных snapshot-кейсов, 51 пропущен | `build-cfe` один раз упал в параллельном integration-run и прошёл отдельно; не было загрузки EPF в 1С, PowerShell и web-test |
 | `mcp-1c` | macOS arm64, release `v1.14.0` | SHA-256 совпал; `--version` и `--help` работают | Нет 1С-базы, расширения, HTTP-сервиса и MCP-вызовов |
 | `EDT-MCP` | release `v2.10.1` | Update Site доступен; ZIP открывается; manifest требует JavaSE 17 | Плагин не устанавливался и tools не запускались в EDT |
 | `OpenIntegrations` | release `v2.3.0` | OSPX открывается; metadata и MCP-модуль присутствуют | Нет OneScript/OPM runtime и вызовов внешних API |
