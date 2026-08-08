@@ -52,7 +52,7 @@ python3 scripts/validate_guide.py
 GH_TOKEN=... python3 scripts/audit_repositories.py
 ```
 
-Токен нужен только для увеличения rate limit и не должен сохраняться в файлах или логах. Еженедельный workflow запускает сверку с временным `GITHUB_TOKEN`. Если upstream branch сдвинулся, audit намеренно падает: факты нужно перечитать перед обновлением `source_revision`.
+Токен нужен только для увеличения rate limit и не должен сохраняться в файлах или логах. Еженедельный workflow запускает сверку с временным `GITHUB_TOKEN`. Проверенный `source_revision` должен оставаться доступным; новый commit в upstream branch выводится как предупреждение и не меняет pin автоматически. Для ручного переаудита используйте `--strict-upstream`: тогда любой drift завершает команду ошибкой и требует сначала прочитать upstream diff.
 
 ## Что ещё нужно для end-to-end
 
