@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -15,6 +16,18 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "catalog" / "tools.json"
 API = "https://api.github.com"
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Check pinned catalog revisions and current GitHub repository metadata."
+    )
+    parser.add_argument(
+        "--strict-upstream",
+        action="store_true",
+        help="fail when a tracked branch or pushed_at value moved after the catalog review",
+    )
+    return parser.parse_args()
 
 
 def request_json(path: str) -> dict[str, object]:
@@ -32,17 +45,23 @@ def request_json(path: str) -> dict[str, object]:
 
 
 def main() -> int:
+    args = parse_args()
     payload = json.loads(CATALOG.read_text(encoding="utf-8"))
     errors: list[str] = []
+    updates: list[str] = []
 
     for tool in payload["tools"]:
+        error_count_before = len(errors)
         parsed = urlparse(tool["repository"])
         owner, repo = parsed.path.strip("/").split("/")
         slug = f"{owner}/{repo}"
         try:
             metadata = request_json(f"/repos/{quote(owner)}/{quote(repo)}")
-            commit = request_json(
+            branch_commit = request_json(
                 f"/repos/{quote(owner)}/{quote(repo)}/commits/{quote(tool['source_ref'])}"
+            )
+            pinned_commit = request_json(
+                f"/repos/{quote(owner)}/{quote(repo)}/commits/{quote(tool['source_revision'])}"
             )
         except (HTTPError, URLError, TimeoutError) as exc:
             errors.append(f"{tool['id']}: GitHub request failed: {exc}")
@@ -61,14 +80,19 @@ def main() -> int:
 
         pushed_at = metadata.get("pushed_at")
         if not isinstance(pushed_at, str) or pushed_at[:10] != tool["maintenance"]["last_push"]:
-            errors.append(
+            updates.append(
                 f"{tool['id']}: last push drifted from {tool['maintenance']['last_push']!r} "
                 f"to {pushed_at!r}"
             )
 
-        if commit.get("sha") != tool["source_revision"]:
-            errors.append(
-                f"{tool['id']}: {tool['source_ref']} moved; documentation review is required"
+        if pinned_commit.get("sha") != tool["source_revision"]:
+            errors.append(f"{tool['id']}: pinned source_revision is not retrievable")
+
+        if branch_commit.get("sha") != tool["source_revision"]:
+            updates.append(
+                f"{tool['id']}: {tool['source_ref']} moved from "
+                f"{tool['source_revision'][:7]} to {str(branch_commit.get('sha'))[:7]}; "
+                "the catalog remains pinned until a documentation review"
             )
 
         api_license = metadata.get("license")
@@ -79,15 +103,27 @@ def main() -> int:
                 f"{tool['id']}: GitHub license changed from {expected_spdx!r} to {api_spdx!r}"
             )
 
-        if not any(error.startswith(f"{tool['id']}:") for error in errors):
-            print(f"repository ok: {tool['id']} @ {tool['source_revision'][:7]}")
+        if len(errors) == error_count_before:
+            print(f"repository ok: {tool['id']} pinned @ {tool['source_revision'][:7]}")
+
+    for update in updates:
+        print(f"repository update: {update}", file=sys.stderr)
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            print(f"::warning title=Catalog upstream update::{update}")
+
+    if args.strict_upstream:
+        errors.extend(f"strict upstream: {update}" for update in updates)
 
     if errors:
         for error in errors:
             print(f"repository drift: {error}", file=sys.stderr)
         return 1
 
-    print(f"repository audit ok: {len(payload['tools'])} entries match GitHub metadata")
+    print(
+        "repository audit ok: "
+        f"{len(payload['tools'])} pinned revisions are retrievable, "
+        f"{len(updates)} upstream update(s) reported"
+    )
     return 0
 
 

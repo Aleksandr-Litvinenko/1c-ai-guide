@@ -54,7 +54,15 @@ python3 -m py_compile scripts/*.py
 GH_TOKEN="$(gh auth token)" python3 scripts/audit_repositories.py
 ```
 
-Онлайн-аудит проверяет доступность репозитория, архивный статус, default branch, лицензию, последний push и соответствие зафиксированного commit SHA. Он не запускает сторонний код.
+Онлайн-аудит проверяет доступность зафиксированного commit SHA, архивный статус, default branch и лицензию. Новые upstream commits и изменение `pushed_at` выводятся как обновления, но не делают обычный weekly-run красным: каталог остаётся воспроизводимо привязан к проверенному commit.
+
+Перед обновлением каталога используйте строгий режим — он завершится ошибкой при любом upstream drift:
+
+```bash
+GH_TOKEN="$(gh auth token)" python3 scripts/audit_repositories.py --strict-upstream
+```
+
+Скрипт не запускает сторонний код. После строгого сигнала сначала прочитайте upstream diff, затем обновляйте `source_revision` и уровень доказательств.
 
 ## Уровни проверки
 
