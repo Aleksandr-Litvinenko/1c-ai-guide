@@ -1,0 +1,70 @@
+# Проверяемость AI × 1C Guide
+
+Дата аудита: **2026-08-08**.
+
+## Что означает статус
+
+| Уровень | Что действительно сделано | Чего он не доказывает |
+|---|---|---|
+| `metadata` | Репозиторий и базовые GitHub-поля существуют | Корректность README и работоспособность |
+| `docs` | README/документация и исходные claims сопоставлены с каталогом | Установку и runtime-поведение |
+| `artifact` | Релиз скачан, checksum/архив/manifest проверены | Запуск внутри 1С или EDT |
+| `cli-smoke` | Безопасная локальная команда реально выполнена | Работу со всеми ОС, tools и реальной базой |
+| `live-smoke` | Реальный удалённый endpoint ответил на ограниченный набор вызовов | SLA, безопасность и полный API |
+| `e2e` | Полный сценарий выполнен на заявленном стенде | Другие версии и окружения |
+
+Ни у одного 1С-проекта в каталоге пока нет статуса `e2e` от этого гида.
+
+## Выполненные проверки
+
+| Проект | Среда и версия | Результат | Граница проверки |
+|---|---|---|---|
+| `cc-1c-skills` | macOS, Python runtime, commit `4c84d84` | `switch.py` установил 77 Codex skills; `epf-init` создал валидный XML | Не было загрузки EPF в 1С, PowerShell и web-test |
+| `mcp-1c` | macOS arm64, release `v1.14.0` | SHA-256 совпал; `--version` и `--help` работают | Нет 1С-базы, расширения, HTTP-сервиса и MCP-вызовов |
+| `EDT-MCP` | release `v2.10.1` | Update Site доступен; ZIP открывается; manifest требует JavaSE 17 | Плагин не устанавливался и tools не запускались в EDT |
+| `OpenIntegrations` | release `v2.3.0` | OSPX открывается; metadata и MCP-модуль присутствуют | Нет OneScript/OPM runtime и вызовов внешних API |
+| `mcp-rest-doc` | hosted endpoint, server `v0.2.0` | `initialize`, `tools/list`, `bitrix-search`, `bitrix-method-details` прошли | Source сервера не опубликован; проверено 2 из 5 tools |
+
+Дополнительный факт: live endpoint `mcp-rest-doc` вернул 5 tools, тогда как README репозитория на дату проверки описывал 4. Поэтому live-smoke и upstream documentation фиксируются раздельно.
+
+## Проверка каталога
+
+Каждая запись schema v2 содержит:
+
+- точный upstream commit (`source_revision`);
+- дату последнего push и archive status;
+- лицензию и источник сведений о ней;
+- runtimes, платформы и prerequisites;
+- доступ к исходникам, метаданным, бизнес-данным и внешним API;
+- известные mutating/destructive operations;
+- уровень проверки, evidence URLs и явное ограничение результата.
+
+Локальные проверки:
+
+```bash
+python3 scripts/validate_catalog.py
+python3 scripts/validate_guide.py
+```
+
+Сверка с GitHub API:
+
+```bash
+GH_TOKEN=... python3 scripts/audit_repositories.py
+```
+
+Токен нужен только для увеличения rate limit и не должен сохраняться в файлах или логах. Еженедельный workflow запускает сверку с временным `GITHUB_TOKEN`. Если upstream branch сдвинулся, audit намеренно падает: факты нужно перечитать перед обновлением `source_revision`.
+
+## Что ещё нужно для end-to-end
+
+Для каждого выбранного стека нужен отдельный test report:
+
+1. ОС, версия платформы 1С/EDT, конфигурация и commit инструмента.
+2. Одноразовая тестовая база и зафиксированный backup.
+3. Точные команды установки и MCP config без секретов.
+4. Позитивный smoke-test чтения с expected output.
+5. Негативные тесты запрещённых операций.
+6. Контрольные суммы или иной data-integrity check.
+7. Проверка журналов, таймаутов и утечки секретов.
+8. Rollback и фактическое восстановление.
+
+Первый приоритет — три «золотых маршрута»: offline BSL review, read-only OData audit и Bitrix24 docs MCP + ограниченный runtime-коннектор.

@@ -1,59 +1,52 @@
 # AI × 1C Guide
 
-A practical, community-driven guide to AI in the 1C:Enterprise ecosystem: Agent Skills, MCP servers, OData, Bitrix24 integrations, security patterns, and reproducible use cases.
+A Russian-first, community-driven decision guide for AI in the 1C:Enterprise ecosystem: Agent Skills, MCP servers, OData, Bitrix24 integrations, security boundaries, and reproducible checks.
 
-[Russian guide](README.md) · [Machine-readable catalog](catalog/tools.json) · [Choose a stack](recipes/choose-stack.md) · [Contribute](CONTRIBUTING.md)
+[Russian guide](README.md) · [Verification matrix](VERIFICATION.md) · [Catalog v2](catalog/tools.json) · [Choose a stack](recipes/choose-stack.md) · [Contribute](CONTRIBUTING.md)
 
-> This is a decision guide, not a ranking or certification. Review the source code, license, data flow, and permissions of every project before use.
+> This is not a ranking, certification, or security guarantee. Every catalog entry states whether it was reviewed from documentation, inspected as a release artifact, smoke-tested through a CLI/live endpoint, or tested end-to-end.
 
-## Who it is for
+## Verified on 2026-08-08
 
-- **1C developers** who want AI-assisted BSL navigation, generation, build, and testing.
-- **Analysts** who need controlled read-only access to 1C data through OData.
-- **Product and engineering leaders** evaluating safe, useful AI workflows.
-- **Integrators** connecting 1C, Bitrix24, external APIs, and local models.
+- All 14 repositories exist, are public, and are not archived.
+- Every entry now records an upstream commit, prerequisites, license status, access surface, known mutating/destructive operations, and evidence links.
+- `cc-1c-skills` and `mcp-1c` passed limited local CLI smoke tests on macOS.
+- `EDT-MCP` and `OpenIntegrations` release artifacts were inspected but not run inside EDT/1C.
+- The hosted Bitrix24 documentation MCP passed initialize, tool listing, search, and method-details calls.
 
-## Start here
+No listed 1C tool has yet passed this guide's complete end-to-end matrix with a real test database. See [VERIFICATION.md](VERIFICATION.md) for exact boundaries.
 
-| Goal | Starting point |
-|---|---|
-| AI-assisted 1C development | [cc-1c-skills](https://github.com/Nikolay-Shirokov/cc-1c-skills) |
-| Context from a live 1C configuration | [mcp-1c](https://github.com/feenlace/mcp-1c), [1c_mcp](https://github.com/vladimir-kharin/1c_mcp) |
-| Work inside 1C:EDT | [EDT-MCP](https://github.com/DitriXNew/EDT-MCP) |
-| Index a large BSL codebase | [code-index-mcp](https://github.com/Regsorm/code-index-mcp), [mcp-1c-v1](https://github.com/fserg/mcp-1c-v1) |
-| Read-only business analytics | OData + a read-only MCP server |
-| A protected gateway to business data | [1c-trusted-gateway](https://github.com/alonehobo/1c-trusted-gateway) |
-| 1C and Bitrix24 integrations | [OpenIntegrations](https://github.com/Bayselonarrend/OpenIntegrations) |
-| Current Bitrix24 REST documentation | [official mcp-rest-doc](https://github.com/bitrix24/mcp-rest-doc) |
-| Full technical catalog of 1C MCP servers | [Awesome 1C MCP Servers](https://github.com/Untru/1c-mcp) |
+## Critical OData warning
+
+The standard 1C OData interface is **not read-only**. It can expose create, update, delete, and document-posting operations. A read-only MCP tool name, system prompt, or hidden client control is not a security boundary.
+
+A read-only pilot requires a dedicated 1C role without write permissions, a minimal published entity set, an optional server-side GET-only gateway, negative mutation tests in a disposable database, and a post-test data-integrity check. See the [official 1C Developer Guide](https://kb.1ci.com/1C_Enterprise_Platform/Guides/Developer_Guides/1C_Enterprise_8.3.23_Developer_Guide/Chapter_17._Integration_with_external_systems/17.4._Standard_OData_interface/17.4.1._General_information/?language=en).
+
+## Safer starting points
+
+| Goal | Starting point | Boundary to enforce |
+|---|---|---|
+| Work with exported source only | `cc-1c-skills` | Use a repository copy; enable database load/delete operations separately |
+| Read configuration context | `mcp-1c` offline dump | A live database also requires a 1C extension and HTTP service |
+| Work inside EDT | `EDT-MCP` | EDT 2026.1/2026.2 only; start with `Analysis Only` or `Code Review` |
+| Index a large BSL repository | `code-index-mcp` | Install `bsl-indexer`; the standard npm `code-index` binary has no 1C support |
+| Read Bitrix24 REST documentation | Official hosted `mcp-rest-doc` | Online-only; server source is not published; it does not access your portal |
 
 ## Safe adoption path
 
 1. Work with exported source code and no business data.
-2. Use a test database with a dedicated read-only account.
-3. Move read-only workflows to production with allowlists, logs, and limits.
-4. Enable writes only with dry runs, previews, explicit human approval, and audit logs.
+2. Use a disposable test database with server-enforced least privilege.
+3. Prove write attempts fail and verify checksums before production read access.
+4. Enable writes only with dry runs, previews, explicit human approval, audit logs, and tested rollback.
 
-See [SECURITY.md](SECURITY.md) for the complete baseline.
-
-## Scope
-
-The guide includes:
-
-- scenario-based stack selection;
-- a curated, machine-readable project catalog;
-- practical recipes for development, business audits, and Bitrix24;
-- security and data-governance checklists;
-- contribution rules that require verifiable technical claims.
-
-The project does not certify listed tools, accept paid placement, or recommend administrative access for LLM agents.
+See [SECURITY.md](SECURITY.md), the [stack selector](recipes/choose-stack.md), and the machine-readable [catalog](catalog/tools.json).
 
 ## Contributing
 
-Add a project, improve a recipe, or submit a verified compatibility note. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+Add a project, reproduce a smoke test, or submit a verified compatibility note. Claims must link to an upstream source or include a reproducible test with version, environment, expected output, and limitations. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 This project is not affiliated with 1C Company or Bitrix24. Product names and trademarks belong to their respective owners.
 
 ## License
 
-The guide and its validation code are available under the [MIT License](LICENSE). Listed projects use their own licenses.
+The guide and validation code are available under the [MIT License](LICENSE). Listed projects use their own licenses or may have no declared license.

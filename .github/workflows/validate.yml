@@ -4,17 +4,37 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  catalog:
+  local-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate catalog
+      - name: Validate catalog schema
         run: python3 scripts/validate_catalog.py
+      - name: Validate guide links and wording
+        run: python3 scripts/validate_guide.py
+      - name: Compile Python scripts
+        run: python3 -m py_compile scripts/*.py
+
+  online-audit:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare catalog with GitHub metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/audit_repositories.py
