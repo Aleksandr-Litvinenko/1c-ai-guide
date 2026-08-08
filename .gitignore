@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Local credentials and endpoint configuration
+.env
+.env.*
+!.env.example
+*.local.env
+
+# Disposable fixtures and raw integration output
+/fixture.json
+/output*.json
+/*.log

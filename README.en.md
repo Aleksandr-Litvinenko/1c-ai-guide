@@ -41,6 +41,18 @@ A read-only pilot requires a dedicated 1C role without write permissions, a mini
 
 See [SECURITY.md](SECURITY.md), the [stack selector](recipes/choose-stack.md), and the machine-readable [catalog](catalog/tools.json).
 
+## Real connection recipes
+
+The detailed recipes are Russian-first and are based on integrations used in the author's own projects:
+
+| Scenario | Evidence boundary | Recipe |
+|---|---|---|
+| 1C:Fresh standard OData | Author-reported private Basic Auth and bounded GET against 1C:UNF; the write path was implemented but not reproduced publicly | [Read and create test documents](recipes/1cfresh-odata.md) |
+| Bitrix24 tasks | A working classic REST integration in `task2bitrix24` | [List tasks and get one task](recipes/bitrix24-tasks.md) |
+| Bitrix24 leads | Author-reported private legacy `crm.lead.add` followed by `crm.lead.get`; the public commit documents the architecture and the new example uses the universal CRM API | [Create leads through a backend webhook](recipes/bitrix24-leads.md) |
+
+The accompanying Python examples are safe by default: read commands cannot call write methods, sensitive output is redacted by default, and test writes are bound to a fingerprint of the selected endpoint. Unit tests run without real endpoints or credentials.
+
 ## Contributing
 
 Add a project, reproduce a smoke test, or submit a verified compatibility note. Claims must link to an upstream source or include a reproducible test with version, environment, expected output, and limitations. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.

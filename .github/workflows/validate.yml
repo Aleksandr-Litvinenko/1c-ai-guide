@@ -25,6 +25,8 @@ jobs:
         run: python3 scripts/validate_guide.py
       - name: Compile Python scripts
         run: python3 -m py_compile scripts/*.py
+      - name: Test integration examples without network
+        run: python3 -m unittest discover -s tests -v
 
   online-audit:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

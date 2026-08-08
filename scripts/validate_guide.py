@@ -21,6 +21,38 @@ BANNED_CLAIMS = {
     "защищённый шлюз к данным": "security properties require independent verification",
     "A protected gateway to business data": "security properties require independent verification",
 }
+SECRET_PATTERNS = {
+    "Bitrix24 webhook-shaped secret": re.compile(
+        r"https://[^/\s<>]+/rest/\d+/[A-Za-z0-9_-]{10,}/?", re.IGNORECASE
+    ),
+    "1C:Fresh application id": re.compile(
+        r"https://1cfresh\.com/a/[A-Za-z0-9_-]+/"
+        r"(?!<|example(?:/|\b)|test(?:-copy)?(?:/|\b))"
+        r"[A-Za-z0-9_-]{4,}(?:/|\b)",
+        re.IGNORECASE,
+    ),
+    "GitHub token": re.compile(
+        r"(?:gh[opsu]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})"
+    ),
+    "literal integration credential assignment": re.compile(
+        r"^\s*(?:export\s+)?"
+        r"(?:ONEC_ODATA_PASSWORD|BITRIX_WEBHOOK|BITRIX24_ALLOW_WRITE)\s*=\s*"
+        r"[\"']?(?!<|\$\(|\$\{|example|redacted|changeme)[^\s#\"']{6,}",
+        re.IGNORECASE | re.MULTILINE,
+    ),
+    "private key": re.compile(
+        r"-{5}BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-{5}", re.IGNORECASE
+    ),
+    "literal Basic Authorization": re.compile(
+        r"Authorization\s*[:=]\s*[\"']?Basic\s+[A-Za-z0-9+/]{16,}={0,2}",
+        re.IGNORECASE,
+    ),
+}
+SPLIT_BITRIX_WEBHOOK_RE = re.compile(
+    r"https://[^/]*\.bitrix24\.[^/]+/rest/\d+/[A-Za-z0-9_-]{10,}/?",
+    re.IGNORECASE,
+)
+MAX_SCAN_BYTES = 2_000_000
 
 
 def main() -> int:
@@ -49,6 +81,28 @@ def main() -> int:
         for claim, reason in BANNED_CLAIMS.items():
             if claim in text:
                 errors.append(f"{relative}: banned wording {claim!r}: {reason}")
+
+    text_files = sorted(
+        path
+        for path in ROOT.rglob("*")
+        if path.is_file()
+        and ".git" not in path.parts
+        and path.stat().st_size <= MAX_SCAN_BYTES
+    )
+    for path in text_files:
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        relative = path.relative_to(ROOT)
+        for label, pattern in SECRET_PATTERNS.items():
+            if pattern.search(text):
+                errors.append(f"{relative}: possible {label}; replace it with a placeholder")
+        compact = re.sub(r"[\"'\s+]", "", text)
+        if SPLIT_BITRIX_WEBHOOK_RE.search(compact):
+            errors.append(
+                f"{relative}: possible split Bitrix24 webhook; replace it with a placeholder"
+            )
 
     catalog = json.loads((ROOT / "catalog" / "tools.json").read_text(encoding="utf-8"))
     readme = (ROOT / "README.md").read_text(encoding="utf-8")

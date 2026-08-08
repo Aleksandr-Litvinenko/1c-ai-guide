@@ -6,6 +6,11 @@
 
 Разделяйте знание API и доступ к порталу.
 
+Практические runtime-рецепты из проектов автора:
+
+- [чтение списка задач и одной задачи](bitrix24-tasks.md);
+- [создание лидов через серверный webhook](bitrix24-leads.md).
+
 ## Слой 1: документация
 
 [Официальный Bitrix24 MCP REST documentation](https://github.com/bitrix24/mcp-rest-doc) — hosted Streamable HTTP сервис по адресу:
