@@ -1,5 +1,7 @@
 # Создание лидов Bitrix24 через входящий webhook
 
+**Русский** · [English](bitrix24-leads.en.md) · [← К гайду](../README.md)
+
 ## Статус проверки
 
 По подтверждению автора, 8 августа 2026 года в приватном рабочем окружении проекта [`1cProductMap`](https://github.com/Aleksandr-Litvinenko/1cProductMap) был пройден живой сценарий:

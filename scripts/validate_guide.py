@@ -110,10 +110,27 @@ def main() -> int:
         if tool["repository"] not in readme:
             errors.append(f"README.md: catalog repository is not represented: {tool['repository']}")
 
-    for recipe in sorted((ROOT / "recipes").glob("*.md")):
-        text = recipe.read_text(encoding="utf-8")
-        if "## Статус проверки" not in text:
-            errors.append(f"{recipe.relative_to(ROOT)}: missing '## Статус проверки'")
+    for guide in sorted((ROOT / "guides").glob("*.md")):
+        text = guide.read_text(encoding="utf-8")
+        heading = (
+            "## Verification status"
+            if guide.name.endswith(".en.md")
+            else "## Статус проверки"
+        )
+        if heading not in text:
+            errors.append(f"{guide.relative_to(ROOT)}: missing {heading!r}")
+
+    for russian in sorted((ROOT / "guides").glob("*.md")):
+        if russian.name.endswith(".en.md"):
+            continue
+        english = russian.with_name(f"{russian.stem}.en.md")
+        if not english.exists():
+            continue
+        for source, other in ((russian, english), (english, russian)):
+            if f"({other.name})" not in source.read_text(encoding="utf-8"):
+                errors.append(
+                    f"{source.relative_to(ROOT)}: missing language switch to {other.name}"
+                )
 
     if errors:
         for error in errors:
