@@ -21,6 +21,7 @@ An open, community-driven guide to MCP servers, Agent Skills, OData, REST APIs, 
 | Let an agent read 1C data over OData | [1C:Fresh → OData: read and test-write](guides/1cfresh-odata.en.md) |
 | Read Bitrix24 tasks from a script | [Bitrix24 tasks through an incoming webhook](guides/bitrix24-tasks.en.md) |
 | Create leads from a website form | [Bitrix24 leads through a backend webhook](guides/bitrix24-leads.en.md) |
+| Reconcile requests, tasks and bugs across three systems | [1C-Connect + Jira + Bitrix24](guides/connect-jira-bitrix24.en.md) |
 | Pick an MCP server or Agent Skills setup | [Catalog of 14 projects](#tool-catalog) |
 | Understand what an agent may and may not touch | [Minimum security baseline](#minimum-security-baseline) |
 | Check what every claim is based on | [Verification matrix](VERIFICATION.md) (in Russian) |
@@ -57,7 +58,21 @@ Author-reported: a private `crm.lead.add` followed by a `crm.lead.get` that conf
 
 → [Guide](guides/bitrix24-leads.en.md) · [`scripts/bitrix24_webhook_example.py`](scripts/bitrix24_webhook_example.py)
 
-Both examples are safe by default: read commands cannot call write methods, sensitive output is redacted, and write operations are bound to a fingerprint of the selected endpoint and require separate confirmation. Unit tests run with no real credentials and no network.
+### 1C-Connect + Jira + Bitrix24: reconciling three systems
+
+One piece of work lives in three places: the client raises a request in 1C-Connect, a consultant runs a Bitrix24 task, a developer fixes code under a Jira issue. The guide works through how these APIs differ and ships a read-only divergence report.
+
+Three findings that break a naive integration:
+
+- **1C-Connect has no outgoing webhooks** — only polling `ServiceRequestRead` with a watermark you store yourself;
+- **the hourly limit is the binding constraint**: 120 calls/hour for the list and just 50 for history, though history accepts a batch of up to 550 IDs; an agent reading history one ticket at a time locks the service out after 50 tickets;
+- **Jira Cloud and Data Center are different APIs**: Cloud removed the old `/search` in 2025, Data Center still serves it, and a model will confidently write code for the wrong one.
+
+Verified live: the Jira half, through anonymous calls to the Apache Software Foundation's public Jira, reproducible without an account. 1C-Connect is documented from the official API reference with no live calls.
+
+→ [Guide](guides/connect-jira-bitrix24.en.md) · [`scripts/connect_jira_bridge_example.py`](scripts/connect_jira_bridge_example.py)
+
+Every example is safe by default: read commands cannot call write methods, sensitive output is redacted, and write operations are bound to a fingerprint of the selected endpoint and require separate confirmation. Unit tests run with no real credentials and no network.
 
 ---
 
@@ -226,7 +241,7 @@ Most useful right now:
 
 ## Status
 
-Version `v0.3`: three connections from the author's own projects, safe-by-default CLI examples, unit tests with no real credentials and no writes to production, and English versions of the main page and the connection guides. Verification boundaries are in [VERIFICATION.md](VERIFICATION.md), and the next tasks are in [ROADMAP.md](ROADMAP.md).
+Version `v0.4`: adds the three-system chain — 1C-Connect, Jira and Bitrix24 — with the Jira half verified live against a public instance, the 1C-Connect SOAP API documented from the official reference, a local call budget, and a read-only divergence report. Previously in `v0.3`: three connections from the author's own projects, safe-by-default CLI examples, and English versions. Verification boundaries are in [VERIFICATION.md](VERIFICATION.md), and the next tasks are in [ROADMAP.md](ROADMAP.md).
 
 This project is not affiliated with 1C Company or Bitrix24. Product names and trademarks belong to their respective owners.
 
