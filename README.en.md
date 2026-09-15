@@ -2,7 +2,7 @@
 
 **How to connect an AI agent to 1C:Enterprise and Bitrix24 without losing your data.**
 
-An open, community-driven guide to MCP servers, Agent Skills, OData, REST APIs, incoming webhooks, permission boundaries, and reproducible checks.
+An open guide to MCP servers, Agent Skills, OData, REST APIs, incoming webhooks, permission boundaries, and reproducible checks.
 
 [![Validate guide](https://github.com/Aleksandr-Litvinenko/1c-ai-guide/actions/workflows/validate.yml/badge.svg)](https://github.com/Aleksandr-Litvinenko/1c-ai-guide/actions/workflows/validate.yml)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -30,15 +30,15 @@ This guide is written for 1C developers (source context, BSL navigation, builds 
 
 ---
 
-## Real connections
+## Four worked connections
 
-What separates this guide from a list of links: the three scenarios below come from integrations the author actually built, not from other people's READMEs. Each one states separately what was verified and what was not.
+These scenarios come from integrations I built in my own projects. Each one says what was verified and what was not.
 
 ### 1C:Fresh over the standard OData interface
 
 A local HTTP client with Basic Auth talks to the `standard.odata` endpoint of a 1C:UNF application in 1C:Fresh: read `$metadata`, list documents with `$select`, `$filter`, and `$top`, fetch a single object by `Ref_Key`, then create an unposted document with duplicate protection.
 
-Author-reported: a private live GET against 1C:UNF. The write path exists in working code but has not been reproduced publicly.
+Verified: a private live GET against 1C:UNF. The write path exists in working code but has not been reproduced publicly.
 
 → [Guide](guides/1cfresh-odata.en.md) · [`scripts/fresh_odata_example.py`](scripts/fresh_odata_example.py)
 
@@ -46,7 +46,7 @@ Author-reported: a private live GET against 1C:UNF. The write path exists in wor
 
 Classic REST: `tasks.task.list` and `tasks.task.get`, `POST application/x-www-form-urlencoded`, `next → start` pagination, bounded retries on rate limits, and `batch` with up to 50 commands. The guide also explains how classic REST differs from REST 3.0 and why the two must not be mixed.
 
-Verified: a working runtime in [`task2bitrix24`](https://github.com/Aleksandr-Litvinenko/task2bitrix24) — tasks, results, logged time, users, and related CRM objects.
+Verified: a working runtime in [`task2bitrix24`](https://github.com/Aleksandr-Litvinenko/task2bitrix24) with tasks, results, logged time, users, and related CRM objects.
 
 → [Guide](guides/bitrix24-tasks.en.md) · [`scripts/bitrix24_webhook_example.py`](scripts/bitrix24_webhook_example.py)
 
@@ -54,7 +54,7 @@ Verified: a working runtime in [`task2bitrix24`](https://github.com/Aleksandr-Li
 
 The correct shape is browser → your HTTPS endpoint → server-side validation → Bitrix24 webhook. The webhook lives on the backend only, because its URL is a password.
 
-Author-reported: a private `crm.lead.add` followed by a `crm.lead.get` that confirmed the stored fields. The public commit documents the architecture; the current example uses the universal `crm.item.add`, which you must verify separately on your own portal.
+Verified: a private `crm.lead.add` followed by a `crm.lead.get` that confirmed the stored fields. The public commit documents the architecture; the current example uses the universal `crm.item.add`, which you must verify separately on your own portal.
 
 → [Guide](guides/bitrix24-leads.en.md) · [`scripts/bitrix24_webhook_example.py`](scripts/bitrix24_webhook_example.py)
 
@@ -76,9 +76,9 @@ Every example is safe by default: read commands cannot call write methods, sensi
 
 ---
 
-## First things first: OData is not read-only
+## OData is not read-only
 
-The standard 1C OData interface supports more than reads. It can create, update, and delete objects and post documents. An MCP tool name, a system prompt, or a hidden client-side button is not a security boundary.
+The standard 1C OData interface can create, update, and delete objects and post documents. An MCP tool name, a system prompt, or a hidden client-side button is not a security boundary.
 
 A read-only setup requires all of the following at once:
 
@@ -92,7 +92,7 @@ Primary source: [1C:Enterprise Developer Guide — Standard OData interface](htt
 
 ---
 
-## Pick a tool in 30 seconds
+## Picking a tool
 
 | Task | Where to start | Boundary you must enforce |
 |---|---|---|
@@ -104,7 +104,7 @@ Primary source: [1C:Enterprise Developer Guide — Standard OData interface](htt
 | Business audit | OData or a purpose-built API | OData is not read-only: deny writes inside 1C and prove it with negative tests |
 | 1C and external API integrations | [OpenIntegrations](https://github.com/Bayselonarrend/OpenIntegrations) | Use a Release or `stable`; the universal `execute_method` can modify external systems |
 | Bitrix24 REST documentation | [mcp-rest-doc](https://github.com/bitrix24/mcp-rest-doc) | Hosted online service with no published server source; it has no access to your portal |
-| Other 1C MCP options | [Awesome 1C MCP Servers](https://github.com/Untru/1c-mcp) | A broad curated list, not a guarantee of completeness or quality |
+| Other 1C MCP options | [Awesome 1C MCP Servers](https://github.com/Untru/1c-mcp) | A broad curated list; completeness and quality are not guaranteed |
 
 The full selection logic lives in [guides/choose-stack.md](guides/choose-stack.md) (in Russian).
 
@@ -137,7 +137,7 @@ A safe adoption path has four steps, and each one starts only after the previous
 
 ## Tool catalog
 
-14 selected projects. The **Checked** column states what was actually done: `Docs` — documentation and author claims reviewed, `Artifact` — release downloaded and inspected, `CLI smoke` — a safe local command was executed, `Live smoke` — a real endpoint responded.
+14 selected projects. The **Checked** column shows what was done: `Docs` — documentation and author claims reviewed, `Artifact` — release downloaded and inspected, `CLI smoke` — a safe local command was executed, `Live smoke` — a real endpoint responded.
 
 | Project | Scenario | Checked | Key risk or boundary | License |
 |---|---|---|---|---|
@@ -189,7 +189,7 @@ The agent does not reach the database on its own. It writes and runs an ordinary
 
 ### Can 1C access really be read-only?
 
-Yes, but the denial has to live inside 1C: a dedicated user with no write permissions, a minimal set of published objects, and a GET-only gateway where needed. Then run negative `POST`, `PATCH`, and `DELETE` tests in a disposable database — without them, "read-only" is an assumption, not a fact.
+Yes, but the denial has to live inside 1C: a dedicated user with no write permissions, a minimal set of published objects, and a GET-only gateway where needed. Then run negative `POST`, `PATCH`, and `DELETE` tests in a disposable database. Without them, "read-only" is only an assumption.
 
 ### What is the difference between an MCP server and Agent Skills?
 
@@ -197,7 +197,7 @@ An MCP server gives the agent tools and access to an external system over a prot
 
 ### How do I store a Bitrix24 webhook safely?
 
-An incoming webhook URL is a password carrying the permissions of the user who created it. It belongs in a secret manager or a backend environment variable — never in client-side JavaScript, a repository, an issue, or an AI chat. If it leaked anywhere, reissue it. See [the leads guide](guides/bitrix24-leads.en.md).
+An incoming webhook URL is a password carrying the permissions of the user who created it. It belongs in a secret manager or a backend environment variable, never in client-side JavaScript, a repository, an issue, or an AI chat. If it leaked anywhere, reissue it. See [the leads guide](guides/bitrix24-leads.en.md).
 
 ### OData, an HTTP service, or an MCP server?
 
@@ -241,7 +241,7 @@ Most useful right now:
 
 ## Status
 
-Version `v0.4`: adds the three-system chain — 1C-Connect, Jira and Bitrix24 — with the Jira half verified live against a public instance, the 1C-Connect SOAP API documented from the official reference, a local call budget, and a read-only divergence report. Previously in `v0.3`: three connections from the author's own projects, safe-by-default CLI examples, and English versions. Verification boundaries are in [VERIFICATION.md](VERIFICATION.md), and the next tasks are in [ROADMAP.md](ROADMAP.md).
+Version `v0.4` adds the three-system chain (1C-Connect, Jira and Bitrix24) with the Jira half verified live against a public instance, the 1C-Connect SOAP API documented from the official reference, a local call budget, and a read-only divergence report. Previously in `v0.3`: three connections from my own projects, safe-by-default CLI examples, and English versions. Verification boundaries are in [VERIFICATION.md](VERIFICATION.md), and the next tasks are in [ROADMAP.md](ROADMAP.md).
 
 This project is not affiliated with 1C Company or Bitrix24. Product names and trademarks belong to their respective owners.
 
